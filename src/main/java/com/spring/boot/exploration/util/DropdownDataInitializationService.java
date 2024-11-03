@@ -27,16 +27,36 @@ public class DropdownDataInitializationService {
     private final GenericDropdownRepository<AffiliationType> affiliationTypeRepository;
 
     @PostConstruct
+    @Transactional
     public void init() {
-        loadGenreFromCsv();
-        loadAffiliationTypeFromCsv();
+        if (isGenreTableEmpty()) {
+            loadGenreFromCsv();
+        }
+        if (isAffiliationTypeTableEmpty()) {
+            loadAffiliationTypeFromCsv();
+        }
+    }
+
+    private boolean isGenreTableEmpty() {
+        try {
+            return !genreRepository.existsById(1L);
+        } catch (Exception e) {
+            System.err.println("Error checking if genre table is empty: " + e.getMessage());
+            return true; // Consider it empty if there's an error
+        }
+    }
+
+    private boolean isAffiliationTypeTableEmpty() {
+        try {
+            return !affiliationTypeRepository.existsById(1L);
+        } catch (Exception e) {
+            System.err.println("Error checking if affiliation type table is empty: " + e.getMessage());
+            return true; // Consider it empty if there's an error
+        }
     }
 
     @Transactional
     public void loadGenreFromCsv() {
-        if (genreRepository.existsById(1L)) {
-            return;
-        }
         List<Genre> genres = new ArrayList<>();
         List<CSVRecord> records = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/dump/tbl_genre.csv"), StandardCharsets.UTF_8))) {
@@ -71,9 +91,6 @@ public class DropdownDataInitializationService {
 
     @Transactional
     public void loadAffiliationTypeFromCsv() {
-        if (affiliationTypeRepository.existsById(1L)) {
-            return;
-        }
         List<AffiliationType> affiliationTypes = new ArrayList<>();
         List<CSVRecord> records = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/dump/tbl_affiliation_type.csv"), StandardCharsets.UTF_8))) {
