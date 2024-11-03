@@ -1,4 +1,4 @@
-package com.spring.boot.exploration.dropdown.util;
+package com.spring.boot.exploration.util;
 
 import com.spring.boot.exploration.dropdown.model.AffiliationType;
 import jakarta.annotation.PostConstruct;
