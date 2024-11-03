@@ -34,6 +34,9 @@ public class DropdownDataInitializationService {
 
     @Transactional
     public void loadGenreFromCsv() {
+        if (genreRepository.existsById(1L)) {
+            return;
+        }
         List<Genre> genres = new ArrayList<>();
         List<CSVRecord> records = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/dump/tbl_genre.csv"), StandardCharsets.UTF_8))) {
@@ -68,6 +71,9 @@ public class DropdownDataInitializationService {
 
     @Transactional
     public void loadAffiliationTypeFromCsv() {
+        if (affiliationTypeRepository.existsById(1L)) {
+            return;
+        }
         List<AffiliationType> affiliationTypes = new ArrayList<>();
         List<CSVRecord> records = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/dump/tbl_affiliation_type.csv"), StandardCharsets.UTF_8))) {
