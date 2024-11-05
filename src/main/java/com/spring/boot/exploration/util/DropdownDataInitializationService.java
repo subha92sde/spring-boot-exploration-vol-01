@@ -58,42 +58,42 @@ public class DropdownDataInitializationService {
     @Transactional
     public void loadGenreFromCsv() {
         List<Genre> genres = new ArrayList<>();
-        List<CSVRecord> records = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/dump/tbl_genre.csv"), StandardCharsets.UTF_8))) {
-            CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
-                    .withDelimiter(';')
-                    .withFirstRecordAsHeader()
-                    .withIgnoreEmptyLines()
-            );
+        List<CSVRecord> records = parseCsvFile("/dump/tbl_genre.csv");
+        for (CSVRecord csvRecord : records) {
+            Long id = Long.parseLong(csvRecord.get("id"));
+            String name = csvRecord.get("name");
 
-            for (CSVRecord csvRecord : csvParser) {
-                records.add(csvRecord);
-            }
-            records.sort(Comparator.comparingLong(record -> Long.parseLong(record.get("id"))));
+            Genre genre = new Genre();
+            genre.setId(id);
+            genre.setName(name);
 
-            for (CSVRecord csvRecord : records) {
-                Long id = Long.parseLong(csvRecord.get("id"));
-                String name = csvRecord.get("name");
-
-                Genre genre = new Genre();
-                genre.setId(id);
-                genre.setName(name);
-
-                genres.add(genre);
-            }
-            genreRepository.saveAll(genres);
-        } catch (IOException e) {
-            System.err.println("Error reading CSV file: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("An error occurred: " + e.getMessage());
+            genres.add(genre);
         }
+        genreRepository.saveAll(genres);
     }
 
     @Transactional
     public void loadAffiliationTypeFromCsv() {
         List<AffiliationType> affiliationTypes = new ArrayList<>();
+        List<CSVRecord> records = parseCsvFile("/dump/tbl_affiliation_type.csv");
+        for (CSVRecord csvRecord : records) {
+            Long id = Long.parseLong(csvRecord.get("id"));
+            String name = csvRecord.get("name");
+
+            AffiliationType affiliationType = new AffiliationType();
+            affiliationType.setId(id);
+            affiliationType.setName(name);
+
+            affiliationTypes.add(affiliationType);
+        }
+        affiliationTypeRepository.saveAll(affiliationTypes);
+    }
+
+    private List<CSVRecord> parseCsvFile(String filePath) {
         List<CSVRecord> records = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/dump/tbl_affiliation_type.csv"), StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(getClass().getResourceAsStream(filePath), StandardCharsets.UTF_8))) {
+
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT
                     .withDelimiter(';')
                     .withFirstRecordAsHeader()
@@ -105,21 +105,11 @@ public class DropdownDataInitializationService {
             }
             records.sort(Comparator.comparingLong(record -> Long.parseLong(record.get("id"))));
 
-            for (CSVRecord csvRecord : records) {
-                Long id = Long.parseLong(csvRecord.get("id"));
-                String name = csvRecord.get("name");
-
-                AffiliationType affiliationType = new AffiliationType();
-                affiliationType.setId(id);
-                affiliationType.setName(name);
-
-                affiliationTypes.add(affiliationType);
-            }
-            affiliationTypeRepository.saveAll(affiliationTypes);
         } catch (IOException e) {
             System.err.println("Error reading CSV file: " + e.getMessage());
         } catch (Exception e) {
             System.err.println("An error occurred: " + e.getMessage());
         }
+        return records;
     }
 }
