@@ -44,7 +44,7 @@ public class DropdownDataInitializationService {
 
     private boolean isGenreTableEmpty() {
         try {
-            return !genreRepository.existsById(1L);
+            return !genreRepository.existsById(0L);
         } catch (Exception e) {
             System.err.println("Error checking if genre table is empty: " + e.getMessage());
             return true; // Consider it empty if there's an error
@@ -53,7 +53,7 @@ public class DropdownDataInitializationService {
 
     private boolean isAffiliationTypeTableEmpty() {
         try {
-            return !affiliationTypeRepository.existsById(1L);
+            return !affiliationTypeRepository.existsById(0L);
         } catch (Exception e) {
             System.err.println("Error checking if affiliation type table is empty: " + e.getMessage());
             return true; // Consider it empty if there's an error
@@ -62,7 +62,7 @@ public class DropdownDataInitializationService {
 
     private boolean isFraternityTableEmpty() {
         try {
-            return !fraternityRepository.existsById(1L);
+            return !fraternityRepository.existsById(0L);
         } catch (Exception e) {
             System.err.println("Error checking if fraternity table is empty: " + e.getMessage());
             return true; // Consider it empty if there's an error
