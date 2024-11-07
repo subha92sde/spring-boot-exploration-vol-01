@@ -41,12 +41,9 @@ public class DropdownDataInitializationService {
         }
     }
 
-    private <T extends GenericDropdownEntity> void loadFromCsv(
-            Class<T> entityClass, String filePath, GenericDropdownService<T> service
-    ) {
+    private <T extends GenericDropdownEntity> void loadFromCsv(Class<T> entityClass, String filePath, GenericDropdownService<T> service) {
         List<T> entities = new ArrayList<>();
         List<CSVRecord> records = parseCsvFile(filePath);
-
         for (CSVRecord csvRecord : records) {
             try {
                 T entity = entityClass.getDeclaredConstructor().newInstance();
