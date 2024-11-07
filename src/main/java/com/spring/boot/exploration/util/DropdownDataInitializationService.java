@@ -1,6 +1,7 @@
 package com.spring.boot.exploration.util;
 
 import com.spring.boot.exploration.dropdown.model.AffiliationType;
+import com.spring.boot.exploration.dropdown.model.Fraternity;
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -25,6 +26,7 @@ import java.util.List;
 public class DropdownDataInitializationService {
     private final GenericDropdownRepository<Genre> genreRepository;
     private final GenericDropdownRepository<AffiliationType> affiliationTypeRepository;
+    private final GenericDropdownRepository<Fraternity> fraternityRepository;
 
     @PostConstruct
     @Transactional
@@ -34,6 +36,9 @@ public class DropdownDataInitializationService {
         }
         if (isAffiliationTypeTableEmpty()) {
             loadAffiliationTypeFromCsv();
+        }
+        if (isFraternityTableEmpty()) {
+            loadFraternityFromCsv();
         }
     }
 
@@ -51,6 +56,15 @@ public class DropdownDataInitializationService {
             return !affiliationTypeRepository.existsById(1L);
         } catch (Exception e) {
             System.err.println("Error checking if affiliation type table is empty: " + e.getMessage());
+            return true; // Consider it empty if there's an error
+        }
+    }
+
+    private boolean isFraternityTableEmpty() {
+        try {
+            return !fraternityRepository.existsById(1L);
+        } catch (Exception e) {
+            System.err.println("Error checking if fraternity table is empty: " + e.getMessage());
             return true; // Consider it empty if there's an error
         }
     }
@@ -87,6 +101,23 @@ public class DropdownDataInitializationService {
             affiliationTypes.add(affiliationType);
         }
         affiliationTypeRepository.saveAll(affiliationTypes);
+    }
+
+    @Transactional
+    public void loadFraternityFromCsv() {
+        List<Fraternity> fraternities = new ArrayList<>();
+        List<CSVRecord> records = parseCsvFile("/dump/tbl_fraternity.csv");
+        for (CSVRecord csvRecord : records) {
+            Long id = Long.parseLong(csvRecord.get("id"));
+            String name = csvRecord.get("name");
+
+            Fraternity fraternity = new Fraternity();
+            fraternity.setId(id);
+            fraternity.setName(name);
+
+            fraternities.add(fraternity);
+        }
+        fraternityRepository.saveAll(fraternities);
     }
 
     private List<CSVRecord> parseCsvFile(String filePath) {
