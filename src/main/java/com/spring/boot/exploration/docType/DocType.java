@@ -1,7 +1,17 @@
 package com.spring.boot.exploration.docType;
 
 import com.spring.boot.exploration.approvalAuthority.ApprovalAuthority;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -28,7 +38,7 @@ public class DocType {
     @Column(name = "title_key", unique = true, nullable = false)
     private String titleKey;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinTable(name = "tbl_doc_type_approval_authority",
             joinColumns = @JoinColumn(name = "doc_type_id"),
             inverseJoinColumns = @JoinColumn(name = "approval_authority_id"))

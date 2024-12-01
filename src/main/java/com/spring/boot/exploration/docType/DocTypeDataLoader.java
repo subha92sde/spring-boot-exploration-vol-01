@@ -3,12 +3,14 @@ package com.spring.boot.exploration.docType;
 import com.spring.boot.exploration.util.DatabaseUtilityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Component
+@Order(1)
 @RequiredArgsConstructor
 public class DocTypeDataLoader implements CommandLineRunner {
     private final DocTypeRepository docTypeRepository;

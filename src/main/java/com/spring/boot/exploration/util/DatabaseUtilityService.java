@@ -19,4 +19,16 @@ public class DatabaseUtilityService<T> {
             return true; // Assuming true if an error occurs
         }
     }
+
+    public boolean isJoinTableEmpty(String tableName) {
+        String query = "SELECT COUNT(*) FROM " + tableName;
+        try {
+            Long count = (Long) entityManager.createNativeQuery(query).getSingleResult();
+            return count == 0;
+        } catch (Exception e) {
+            System.err.println("Error checking if table '" + tableName + "' is empty.");
+            System.err.println("Exception: " + e.getClass().getName() + " - " + e.getMessage());
+            return true; // Assume empty if an error occurs
+        }
+    }
 }

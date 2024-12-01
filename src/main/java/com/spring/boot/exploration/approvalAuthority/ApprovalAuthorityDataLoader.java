@@ -3,12 +3,14 @@ package com.spring.boot.exploration.approvalAuthority;
 import com.spring.boot.exploration.util.DatabaseUtilityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Component
+@Order(2)
 @RequiredArgsConstructor
 public class ApprovalAuthorityDataLoader implements CommandLineRunner {
     private final ApprovalAuthorityRepository approvalAuthorityRepository;
