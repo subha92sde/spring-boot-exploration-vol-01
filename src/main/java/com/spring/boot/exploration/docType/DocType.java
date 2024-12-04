@@ -1,5 +1,6 @@
 package com.spring.boot.exploration.docType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.spring.boot.exploration.approvalAuthority.ApprovalAuthority;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -38,10 +39,11 @@ public class DocType {
     @Column(name = "title_key", unique = true, nullable = false)
     private String titleKey;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_doc_type_approval_authority",
             joinColumns = @JoinColumn(name = "doc_type_id"),
             inverseJoinColumns = @JoinColumn(name = "approval_authority_id"))
+    @JsonIgnore
     private Set<ApprovalAuthority> approvalAuthoritySet = new HashSet<>();
 
     public DocType(Long id, String title, String titleKey) {

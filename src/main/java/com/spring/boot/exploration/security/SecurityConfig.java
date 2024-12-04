@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login/applicant").permitAll()
                         .requestMatchers("/doc-type/get-all/without-pagination").hasRole("APPLICANT")
+                        .requestMatchers("/doc-type/get-approval-authorities-by-doc-type-id/*").hasRole("APPLICANT")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
