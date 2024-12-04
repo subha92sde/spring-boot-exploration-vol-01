@@ -25,10 +25,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login/applicant").permitAll() // Allow login endpoint
-                        .anyRequest().authenticated() // Protect all other endpoints
+                        .requestMatchers("/auth/login/applicant").permitAll()
+                        .requestMatchers("/doc-type/get-all/without-pagination").hasRole("APPLICANT")
+                        .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add custom JWT filter
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
